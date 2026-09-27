@@ -206,91 +206,152 @@
         </nav>
 
         <!-- TAB 1: SMART HONORIFIC TRANSLATOR -->
-        <section id="tab-content-translator" class="tab-content block space-y-6">
-            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-6">
-                <div>
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2" data-i18n="transTitle">
-                        <i data-lucide="sparkles" class="w-5 h-5 text-blue-400"></i>
-                        Адаптивный переводчик с уровнем вежливости
-                    </h2>
-                    <p class="text-xs text-slate-400 mt-1" data-i18n="transSub">Выбирайте роль собеседника для корректного использования форм речи.</p>
-                </div>
+      function performTranslation() {
+            const input = document.getElementById('translatorInput').value.trim();
+            const output = document.getElementById('translatorOutput');
+            const transcriptionOutput = document.getElementById('transcriptionOutput');
+            const targetLang = document.getElementById('targetLanguage').value;
 
-                <div class="space-y-2">
-                    <label class="text-xs font-semibold text-slate-300 block uppercase tracking-wider" data-i18n="selectRole">С кем вы общаетесь? (Выбор роли):</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-                        <button onclick="selectRole('Professor')" class="role-btn active p-3 bg-blue-600 text-white rounded-xl border border-blue-500/50 text-left transition-all">
-                            <i data-lucide="graduation-cap" class="w-4 h-4 mb-1"></i>
-                            <p class="text-xs font-bold">Professor</p>
-                            <p class="text-[10px] opacity-80">Высокий 존댓말</p>
-                        </button>
-                        <button onclick="selectRole('Immigration officer')" class="role-btn p-3 bg-slate-950 hover:bg-slate-800 text-slate-300 rounded-xl border border-slate-800 text-left transition-all">
-                            <i data-lucide="shield-check" class="w-4 h-4 mb-1"></i>
-                            <p class="text-xs font-bold">Immigration</p>
-                            <p class="text-[10px] text-slate-500">Официальный 니다</p>
-                        </button>
-                        <button onclick="selectRole('Doctor')" class="role-btn p-3 bg-slate-950 hover:bg-slate-800 text-slate-300 rounded-xl border border-slate-800 text-left transition-all">
-                            <i data-lucide="stethoscope" class="w-4 h-4 mb-1"></i>
-                            <p class="text-xs font-bold">Doctor</p>
-                            <p class="text-[10px] text-slate-500">Медицинский</p>
-                        </button>
-                        <button onclick="selectRole('Bank employee')" class="role-btn p-3 bg-slate-950 hover:bg-slate-800 text-slate-300 rounded-xl border border-slate-800 text-left transition-all">
-                            <i data-lucide="building-2" class="w-4 h-4 mb-1"></i>
-                            <p class="text-xs font-bold">Bank Staff</p>
-                            <p class="text-[10px] text-slate-500">Деловой</p>
-                        </button>
-                        <button onclick="selectRole('Landlord')" class="role-btn p-3 bg-slate-950 hover:bg-slate-800 text-slate-300 rounded-xl border border-slate-800 text-left transition-all">
-                            <i data-lucide="home" class="w-4 h-4 mb-1"></i>
-                            <p class="text-xs font-bold">Landlord</p>
-                            <p class="text-[10px] text-slate-500">Уважительный</p>
-                        </button>
-                        <button onclick="selectRole('Friend')" class="role-btn p-3 bg-slate-950 hover:bg-slate-800 text-slate-300 rounded-xl border border-slate-800 text-left transition-all">
-                            <i data-lucide="smile" class="w-4 h-4 mb-1"></i>
-                            <p class="text-xs font-bold">Friend</p>
-                            <p class="text-[10px] text-slate-500">Неформальный 반말</p>
-                        </button>
-                    </div>
-                </div>
+            if (!input) {
+                output.textContent = "[Введите текст для перевода...]";
+                transcriptionOutput.textContent = "[Транскрипция появится здесь...]";
+                return;
+            }
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-2">
-                        <label class="text-xs font-semibold text-slate-300 block" data-i18n="inputText">Введите текст:</label>
-                        <textarea id="translatorInput" rows="5" placeholder="Введите фразу..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-500 focus:border-blue-500 focus:outline-none custom-scrollbar resize-none"></textarea>
-                    </div>
+            let translated = "";
+            let transcription = "";
 
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <label class="text-xs font-semibold text-slate-300 block" data-i18n="translationResult">Результат перевода:</label>
-                            <!-- Target Languages Selector for Translator -->
-                            <select id="targetLanguage" onchange="performTranslation()" class="bg-slate-950 text-xs border border-slate-800 rounded-lg px-2 py-1 text-blue-400 focus:outline-none">
-                                <option value="ko">Korean (한국어)</option>
-                                <option value="fr">French (Français)</option>
-                                <option value="ja">Japanese (日本語)</option>
-                                <option value="zh">Chinese (中文)</option>
-                                <option value="es">Spanish (Español)</option>
-                                <option value="kk">Kazakh (Қазақша)</option>
-                                <option value="ar">Arabic (العربية)</option>
-                                <option value="pt">Portuguese (Português)</option>
-                                <option value="de">German (Deutsch)</option>
-                                <option value="tr">Turkish (Türkçe)</option>
-                                <option value="ru">Russian (Русский)</option>
-                                <option value="en">English</option>
-                            </select>
-                        </div>
-                        <div id="translatorOutput" class="w-full h-[126px] bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-emerald-400 font-mono leading-relaxed overflow-y-auto custom-scrollbar">
-                            [Перевод появится здесь...]
-                        </div>
-                    </div>
-                </div>
+            if (targetLang === 'ko') {
+                if (activeRole === 'Professor') {
+                    translated = "교수님, 실례지만 질문 하나 드려도 되겠습니까?";
+                    transcription = "Gyosunim, silleyejiman jilmun hana deuryeodo doegessseumnikka? (Кёсуним, силледжиман джильмун хана дылёдо твегессымниока?)";
+                } else if (activeRole === 'Immigration officer' || activeRole === 'Bank employee') {
+                    translated = "안녕하십니까, 문의할 사항이 있어서 왔습니다.";
+                    transcription = "Annyeonghasimnika, mun-uihal sahang-i isseoseo wasseumnida. (Аннёнхасимника, мунихаль сахани иссосо вассымнида)";
+                } else if (activeRole === 'Friend') {
+                    translated = "안녕! 혹시 이것 좀 물어봐도 돼?";
+                    transcription = "Annyeong! Hoksi igeos jom mureobwado dwae? (Аннён! Хокси игот чом муровадо твэ?)";
+                } else {
+                    translated = "안녕하세요, 질문이 하나 있어요.";
+                    transcription = "Annyeonghaseyo, jilmun-i hana isseoyo. (Аннёнхасеё, джильмуни хана иссоё)";
+                }
+            } else if (targetLang === 'de') {
+                translated = (activeRole === 'Friend') ? "Hallo! Kann ich dich etwas fragen?" : "Guten Tag, darf ich Ihnen eine Frage stellen?";
+                transcription = (activeRole === 'Friend') ? "Hallo! Kan ikh dikh etvas fragen?" : "Guten Tag, darf ikh Ihnen eine Frage shtellen?";
+            } else if (targetLang === 'kk') {
+                translated = (activeRole === 'Friend') ? "Сәлем! Сенен бір нәрсе сұрасам бола ма?" : "Сәлеметсіз бе, сізге сұрақ қойсам бола ма?";
+                transcription = "Sālemetsiz be, sizge sūra qoysam bola ma?";
+            } else if (targetLang === 'fr') {
+                translated = (activeRole === 'Friend') ? "Salut! Je peux te poser une question?" : "Bonjour, puis-je vous poser une question?";
+                transcription = "Bonjour, pui-jü vu pozer un kestion?";
+            } else if (targetLang === 'ja') {
+                translated = (activeRole === 'Professor') ? "教授、失礼ですが質問をしてもよろしいでしょうか？" : "こんにちは、質問があります。";
+                transcription = "Kyōju, shitsurei desu ga shitsumon wo shitemo yoroshī deshō ka?";
+            } else {
+                translated = `[${targetLang.toUpperCase()}] (${activeRole}): ${input}`;
+                transcription = `[Phonetic transcription for ${targetLang}]`;
+            }
 
-                <div class="flex justify-end">
-                    <button onclick="performTranslation()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl text-sm flex items-center gap-2 transition-all shadow-lg shadow-blue-600/30">
-                        <span data-i18n="btnTranslate">Перевести</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
+            output.textContent = translated;
+            transcriptionOutput.textContent = transcription;
+        }
+
+        function addTransaction(e) {
+            e.preventDefault();
+            const desc = document.getElementById('financeDesc').value;
+            const amount = parseFloat(document.getElementById('financeAmount').value);
+            const type = document.getElementById('financeType').value;
+
+            financeData.push({ id: Date.now(), desc, amount, type });
+            document.getElementById('financeDesc').value = '';
+            document.getElementById('financeAmount').value = '';
+
+            renderFinance();
+        }
+
+        function deleteTransaction(id) {
+            financeData = financeData.filter(item => item.id !== id);
+            renderFinance();
+        }
+
+        function renderFinance() {
+            const list = document.getElementById('financeList');
+            list.innerHTML = '';
+
+            let income = 0;
+            let expense = 0;
+
+            financeData.forEach(item => {
+                if (item.type === 'income') income += item.amount;
+                else expense += item.amount;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-3 font-medium text-white">${item.desc}</td>
+                    <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] ${item.type === 'income' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}">${item.type.toUpperCase()}</span></td>
+                    <td class="p-3 font-bold ${item.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}">₩${item.amount.toLocaleString()}</td>
+                    <td class="p-3 text-right"><button onclick="deleteTransaction(${item.id})" class="text-slate-500 hover:text-rose-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td>
+                `;
+                list.appendChild(tr);
+            });
+
+            document.getElementById('totalIncome').textContent = `₩${income.toLocaleString()}`;
+            document.getElementById('totalExpense').textContent = `₩${expense.toLocaleString()}`;
+            document.getElementById('totalBalance').textContent = `₩${(income - expense).toLocaleString()}`;
+            lucide.createIcons();
+        }
+
+        function initMap() {
+            const defaultCenter = universityCoords['SNU'];
+            mapInstance = L.map('mapContainer').setView([defaultCenter.lat, defaultCenter.lng], 14);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(mapInstance);
+
+            updateMapForUniversity();
+        }
+
+        function updateMapForUniversity() {
+            if (!mapInstance) return;
+            const uni = universityCoords[currentUser.university] || universityCoords['SNU'];
+            
+            mapInstance.setView([uni.lat, uni.lng], 14);
+
+            mapMarkers.forEach(m => mapInstance.removeLayer(m));
+            mapMarkers = [];
+
+            const campusMarker = L.marker([uni.lat, uni.lng]).addTo(mapInstance)
+                .bindPopup(`<b>${uni.name}</b><br>Ваш Кампус`);
+            mapMarkers.push(campusMarker);
+
+            const places = [
+                { lat: uni.lat + 0.003, lng: uni.lng + 0.002, name: "Halal Asian Food", cat: "halal" },
+                { lat: uni.lat - 0.002, lng: uni.lng + 0.004, name: "Green Vegan Cafe", cat: "vegan" },
+                { lat: uni.lat + 0.001, lng: uni.lng - 0.003, name: "24/7 CU Convenience Store", cat: "24h" }
+            ];
+
+            places.forEach(p => {
+                const marker = L.marker([p.lat, p.lng]).addTo(mapInstance)
+                    .bindPopup(`<b>${p.name}</b><br>Категория: ${p.cat}`);
+                marker.category = p.cat;
+                mapMarkers.push(marker);
+            });
+        }
+
+        function filterMapMarkers(cat) {
+            mapMarkers.forEach(m => {
+                if (!m.category) return;
+                if (cat === 'all' || m.category === cat) {
+                    mapInstance.addLayer(m);
+                } else {
+                    mapInstance.removeLayer(m);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
 
         <!-- TAB 2: FINANCE TRACKER -->
         <section id="tab-content-finance" class="tab-content hidden space-y-6">
